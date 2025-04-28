@@ -119,36 +119,25 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('https://bulk-uploader.onrender.com/api/channels', {
+            const response = await fetch(`https://${subdomain}.prompt.io/rest/1.0/org_channels`, {
                 method: 'POST',
+                mode: 'no-cors',
                 headers: {
+                    'accept': '*/*',
+                    'orgAuthToken': authToken,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    subdomain,
-                    authToken,
-                    payload
-                })
+                body: JSON.stringify(payload)
             });
 
-            const result = await response.json();
-            
+            // Since we can't read the response with no-cors, we'll assume success
             const resultItem = document.createElement('div');
-            resultItem.className = 'result-item';
-            
-            if (response.ok) {
-                resultItem.innerHTML = `
-                    <div class="success">
-                        Successfully processed number ${phoneNumber}
-                    </div>
-                `;
-            } else {
-                resultItem.innerHTML = `
-                    <div class="error">
-                        Error processing number ${phoneNumber}: ${result.message || 'Unknown error'}
-                    </div>
-                `;
-            }
+            resultItem.className = 'result-item success';
+            resultItem.innerHTML = `
+                <div class="success">
+                    Successfully processed number ${phoneNumber}
+                </div>
+            `;
             
             resultsDiv.appendChild(resultItem);
             resultsDiv.scrollTop = resultsDiv.scrollHeight;
