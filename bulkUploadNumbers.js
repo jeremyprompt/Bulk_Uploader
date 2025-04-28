@@ -123,11 +123,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: {
-                    'accept': '*/*',
-                    'orgAuthToken': authToken,
-                    'Content-Type': 'application/json'
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'orgAuthToken': authToken
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    ...payload,
+                    assignToEveryone: true
+                })
             });
 
             // Since we can't read the response with no-cors, we'll assume success
