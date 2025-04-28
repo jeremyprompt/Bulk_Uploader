@@ -1,0 +1,9 @@
+{
+  "name": "bulk-uploader",
+  "version": "1.0.0",
+  "description": "Bulk Channel Creator",
+  "scripts": {
+    "build": "echo 'No build step required for static files'",
+    "start": "echo 'No start script required for static files'"
+  }
+} 
