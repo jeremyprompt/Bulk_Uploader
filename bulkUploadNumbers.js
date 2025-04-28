@@ -88,16 +88,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Format the name with just the digits and a plus sign
         const formattedName = `+${digits}`;
         
-        // Format the apiId with the new pattern
-        const formattedApiId = `mbw_${digits.substring(0, 3)}_${digits.substring(3)}`;
-        
-        const url = `https://${subdomain}.prompt.io/rest/1.0/org_channels`;
-        
-        const headers = {
-            'accept': '*/*',
-            'orgAuthToken': authToken,
-            'Content-Type': 'application/json'
-        };
+        // Format the apiId based on channel type
+        let formattedApiId;
+        if (channelType === "MANAGED_BANDWIDTH") {
+            formattedApiId = `mbw_${digits.substring(0, 3)}_${digits.substring(3)}`;
+        } else if (channelType === "MANAGED_SIGNAL_WIRE") {
+            formattedApiId = `ps_${digits.substring(0, 3)}_${digits.substring(3, 6)}_${digits.substring(6)}`;
+        }
         
         const payload = {
             name: formattedName,
@@ -122,11 +119,16 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch(url, {
+            const response = await fetch('https://bulk-uploader.onrender.com/api/channels', {
                 method: 'POST',
-                headers: headers,
-                body: JSON.stringify(payload),
-                params: { assignToEveryone: 'true' }
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    subdomain,
+                    authToken,
+                    payload
+                })
             });
 
             const result = await response.json();
