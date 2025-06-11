@@ -81,8 +81,7 @@ export default function Home() {
         phoneNumber: `+1${digits}`
       },
       prePurchased: true,
-      channelApps: [],
-      assignToEveryone: true
+      channelApps: []
     };
 
     try {
