@@ -14,7 +14,7 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    const url = `https://${subdomain}.prompt.io/rest/1.0/org_channels`;
+    const url = `https://${subdomain}.prompt.io/rest/1.0/org_channels?assignToEveryone=true`;
     
     console.log('Making request to:', url);
     console.log('With payload:', JSON.stringify(payload, null, 2));
