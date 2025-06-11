@@ -86,6 +86,12 @@ export default function Home() {
     };
 
     try {
+      console.log('Sending request with:', {
+        subdomain,
+        authToken: authToken ? '***' : undefined,
+        payload: requestBody
+      });
+
       const response = await fetch('/api/channels', {
         method: 'POST',
         headers: {
@@ -100,15 +106,18 @@ export default function Home() {
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('Error response:', errorData);
         throw new Error(errorData.error || 'Failed to create channel');
       }
 
       const data = await response.json();
+      console.log('Success response:', data);
       setResults(prev => [...prev, {
         type: 'success',
         message: `Successfully processed number ${phoneNumber}`
       }]);
     } catch (error) {
+      console.error('Error in createChannel:', error);
       setResults(prev => [...prev, {
         type: 'error',
         message: `Error processing number ${phoneNumber}: ${error.message}`
