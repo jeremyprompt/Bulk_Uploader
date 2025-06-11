@@ -115,48 +115,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 phoneNumber: `+1${digits}`
             },
             prePurchased: true,
-            channelApps: []
+            channelApps: [],
+            assignToEveryone: true
         };
 
         try {
-            const url = `https://${subdomain}.prompt.io/rest/1.0/org_channels`;
-            const headers = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'orgAuthToken': authToken
-            };
-
-            const requestBody = {
-                name: formattedName,
-                apiId: formattedApiId,
-                channelType: channelType,
-                registrationStatus: "NA",
-                firstMessage: "",
-                firstMessageEnabled: false,
-                apiOptOutMessage: "",
-                apiOptOutMessageEnabled: false,
-                optOutFinalMessage: "",
-                optOutFinalMessageEnabled: false,
-                incomingCallResponseType: forwardNumber.trim() ? "FORWARD" : "REJECT",
-                incomingCallAudioUploadId: 0,
-                incomingCallForwardNumber: forwardNumber.trim() || "",
-                unsupportedMediaMessage: "",
-                managedBandwidthModel: {
-                    phoneNumber: `+1${digits}`
-                },
-                prePurchased: true,
-                channelApps: [],
-                assignToEveryone: true
-            };
-
-            const response = await fetch(url, {
+            const response = await fetch('/api/channels', {
                 method: 'POST',
-                mode: 'no-cors',
-                headers: headers,
-                body: JSON.stringify(requestBody)
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    subdomain,
+                    authToken,
+                    payload
+                })
             });
 
-            // Since we can't read the response with no-cors, we'll assume success
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to create channel');
+            }
+
+            const data = await response.json();
             const resultItem = document.createElement('div');
             resultItem.className = 'result-item success';
             resultItem.innerHTML = `

@@ -62,13 +62,6 @@ export default function Home() {
       formattedApiId = `ps_${digits.substring(0, 3)}_${digits.substring(3, 6)}_${digits.substring(6)}`;
     }
 
-    const url = `https://${subdomain}.prompt.io/rest/1.0/org_channels`;
-    const headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'orgAuthToken': authToken
-    };
-
     const requestBody = {
       name: formattedName,
       apiId: formattedApiId,
@@ -93,13 +86,24 @@ export default function Home() {
     };
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch('/api/channels', {
         method: 'POST',
-        mode: 'no-cors',
-        headers: headers,
-        body: JSON.stringify(requestBody)
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          subdomain,
+          authToken,
+          payload: requestBody
+        })
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create channel');
+      }
+
+      const data = await response.json();
       setResults(prev => [...prev, {
         type: 'success',
         message: `Successfully processed number ${phoneNumber}`
