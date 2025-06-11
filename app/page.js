@@ -142,7 +142,7 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <h1>Bulk Channel Creator</h1>
+      <h1 className={styles.title}>Bulk Channel Creator</h1>
       
       <div className={styles.configSection}>
         <h3>Configuration</h3>
@@ -155,6 +155,7 @@ export default function Home() {
               value={subdomain}
               onChange={(e) => setSubdomain(e.target.value)}
               placeholder="Enter your subdomain"
+              className={styles.input}
             />
           </div>
           <div>
@@ -165,6 +166,7 @@ export default function Home() {
               value={authToken}
               onChange={(e) => setAuthToken(e.target.value)}
               placeholder="Enter your auth token"
+              className={styles.input}
             />
           </div>
           <div>
@@ -175,6 +177,7 @@ export default function Home() {
               value={forwardNumber}
               onChange={(e) => setForwardNumber(e.target.value)}
               placeholder="Enter your forwarding number"
+              className={styles.input}
             />
           </div>
           <div>
@@ -207,7 +210,7 @@ export default function Home() {
             <h3>Upload CSV File</h3>
             <p>Your CSV file should contain a column named 'NUMBER' with phone numbers.</p>
             <input type="file" id="csvFile" accept=".csv" />
-            <button type="submit">Process CSV</button>
+            <button type="submit" className={styles.button}>Process CSV</button>
           </div>
         </form>
       </div>
