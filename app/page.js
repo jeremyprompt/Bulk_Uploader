@@ -221,6 +221,7 @@ export default function Home() {
           <div className={styles.uploadSection}>
             <h3>Upload CSV File</h3>
             <p>Your CSV file should contain a column named 'NUMBER' with phone numbers.</p>
+            <p>For best results, use numbers formatted as (123) 456-7890</p>
             <input type="file" id="csvFile" accept=".csv" />
             <button type="submit" className={styles.button}>Process CSV</button>
           </div>
