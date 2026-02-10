@@ -9,6 +9,7 @@ export default function Home() {
   const [authToken, setAuthToken] = useState('');
   const [forwardNumber, setForwardNumber] = useState('');
   const [channelType, setChannelType] = useState('');
+  const [customName, setCustomName] = useState('');
 
   const showError = (message) => {
     setResults(prev => [...prev, {
@@ -55,6 +56,9 @@ export default function Home() {
     const digits = phoneNumber.replace(/\D/g, '');
     const formattedName = `+${digits}`;
     
+    // Use custom name if provided, otherwise use formattedName
+    const channelName = customName.trim() || formattedName;
+    
     let formattedApiId;
     if (channelType === "MANAGED_BANDWIDTH") {
       formattedApiId = `mbw_${digits.substring(0, 3)}_${digits.substring(3)}`;
@@ -63,7 +67,7 @@ export default function Home() {
     }
 
     const requestBody = {
-      name: formattedName,
+      name: channelName,
       apiId: formattedApiId,
       channelType: channelType,
       registrationStatus: "NA",
@@ -191,6 +195,20 @@ export default function Home() {
               placeholder="Enter your forwarding number"
               className={styles.input}
             />
+          </div>
+          <div>
+            <label htmlFor="customName">Custom Channel Name (optional):</label>
+            <input
+              type="text"
+              id="customName"
+              value={customName}
+              onChange={(e) => setCustomName(e.target.value)}
+              placeholder="Leave blank to use default (+1234567890)"
+              className={styles.input}
+            />
+            <p style={{ fontSize: '0.9em', color: '#666', marginTop: '4px' }}>
+              If left blank, will use the formatted phone number as the name
+            </p>
           </div>
           <div>
             <h4>Channel Type</h4>

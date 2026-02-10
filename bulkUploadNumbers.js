@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const subdomainInput = document.getElementById('subdomain');
     const authTokenInput = document.getElementById('authToken');
     const forwardNumberInput = document.getElementById('forwardNumber');
+    const customNameInput = document.getElementById('customName');
     const channelTypeRadios = document.getElementsByName('channelType');
 
     processButton.addEventListener('click', async () => {
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const subdomain = subdomainInput.value.trim();
         const authToken = authTokenInput.value.trim();
         const forwardNumber = forwardNumberInput.value.trim();
+        const customName = customNameInput.value.trim();
         const selectedChannelType = getSelectedChannelType();
 
         if (!subdomain || !authToken || !selectedChannelType) {
@@ -29,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsDiv.innerHTML = '';
             
             for (const phoneNumber of phoneNumbers) {
-                await createChannel(phoneNumber, subdomain, authToken, forwardNumber, selectedChannelType);
+                await createChannel(phoneNumber, subdomain, authToken, forwardNumber, selectedChannelType, customName);
                 // Add a small delay between requests to avoid rate limiting
                 await new Promise(resolve => setTimeout(resolve, 500));
             }
@@ -81,12 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function createChannel(phoneNumber, subdomain, authToken, forwardNumber, channelType) {
+    async function createChannel(phoneNumber, subdomain, authToken, forwardNumber, channelType, customName) {
         // Clean the number by removing all non-digit characters
         const digits = phoneNumber.replace(/\D/g, '');
         
         // Format the name with just the digits and a plus sign
         const formattedName = `+${digits}`;
+        
+        // Use custom name if provided, otherwise use formattedName
+        const channelName = customName || formattedName;
         
         // Format the apiId based on channel type
         let formattedApiId;
@@ -97,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         const payload = {
-            name: formattedName,
+            name: channelName,
             apiId: formattedApiId,
             channelType: channelType,
             registrationStatus: "NA",
